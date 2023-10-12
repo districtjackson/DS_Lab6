@@ -63,18 +63,20 @@ set the "paint" for the paintbrush
    */
 	public void paint(int x, int y, Paint[][] mesh)
 	{
-		if (BrushMode == paintMode) {
+		if(mode == BrushMode.paintMode) {
 			mesh[x][y] = getPaint();
 		}
 		
-		else if (BrushMode == fillMode) {
+		else if(mode == BrushMode.fillMode) {
+			fill(x, y, mesh);
 			
 		}
-		else if (BrushMode == pattern1Mode) {
+		else if(mode == BrushMode.pattern1Mode) {
+			pattern1(x, y, mesh, Gold, White);
 	
 		}
-		else if (BrushMode == pattern2Mode) {
-	
+		else if(mode == BrushMode.pattern2Mode) {
+			pattern2(x, y, mesh, Gold, White);
 		}
 		
 		
@@ -85,13 +87,13 @@ set the "paint" for the paintbrush
 		
 		mesh[x][y] = getPaint();
 		
-		if((x - 1) != -1 && mesh[x - 1][y].getColor == c) {
+		if((x - 1) != -1 && mesh[x - 1][y].getColor() == c) {
 			fill(x - 1, y, mesh);
-		}if(y + 1) != 401 && mesh[x][y + 1].getColor == c){
+		}if((y + 1) < mesh[x].length && mesh[x][y + 1].getColor() == c){
 			fill(x, y + 1, mesh);
-		}if((x + 1) != 401 && mesh[x + 1][y].getColor == c) {
+		}if((x + 1) < mesh.length && mesh[x + 1][y].getColor() == c) {
 			fill(x + 1, y, mesh);
-		}if(y - 1) != -1 && mesh[x][y - 1].getColor == c){
+		}if((y - 1) != -1 && mesh[x][y - 1].getColor() == c){
 			fill(x, y - 1, mesh);
 		}
 	}
@@ -101,49 +103,56 @@ set the "paint" for the paintbrush
 		
 		mesh[x][y] = color1;
 		
-		if((x - 1) != -1 && mesh[x - 1][y].getColor == c) {
-			fill(x - 1, y, mesh, color1, color2);
-		}if(y + 1) != 401 && mesh[x][y + 1].getColor == c){
-			fill(x, y + 1, mesh, color2, color1);
-		}if((x + 1) != 401 && mesh[x + 1][y].getColor == c) {
-			fill(x + 1, y, mesh, color1, color2);
-		}if(y - 1) != -1 && mesh[x][y - 1].getColor == c){
-			fill(x, y - 1, mesh, color2, color1);
+		if((x - 1) != -1 && mesh[x - 1][y].getColor() == c) {
+			pattern1(x - 1, y, mesh, color1, color2);
+		}if((y + 1) < mesh[x].length && mesh[x][y + 1].getColor() == c){
+			pattern1(x, y + 1, mesh, color2, color1);
+		}if((x + 1) < mesh.length && mesh[x + 1][y].getColor() == c) {
+			pattern1(x + 1, y, mesh, color1, color2);
+		}if((y - 1) != -1 && mesh[x][y - 1].getColor() == c){
+			pattern1(x, y - 1, mesh, color2, color1);
 		}
 	}
 
 	class Pixel{
 		int x;
 		int y;
+		boolean isColor1;
 		
-		Pixel(int x, int y){
+		Pixel(int x, int y, boolean isColor1){
 			this.x = x;
 			this.y = y;
+			this.isColor1 = isColor1;
 		}
 	}
 	
-	public void pattern2(int x, int y, Paint[][] mesh) {
+	public void pattern2(int x, int y, Paint[][] mesh, Paint color1, Paint color2) {
 		Color c = mesh[x][y].getColor();
-		Pixel pixel1 = new Pixel(x, y);
-		Stack stack = new Stack<Pixel>;
+		Pixel pixel1 = new Pixel(x, y, true);
+		Stack<Pixel> stack = new Stack<Pixel>();
 		stack.push(pixel1);
 		
-		while !stack.isEmpty(){
-			pixel1 = stack.pop()
-			if((pixel1.x - 1) != -1 && mesh[pixel1.x - 1][pixel1.y].getColor == c) {
-				Pixel pixeltemp = new Pixel(pixel1.x -1, pixel1.y);
+		while (!stack.isEmpty()){
+			pixel1 = stack.pop();
+			if((pixel1.x - 1) != -1 && mesh[pixel1.x - 1][pixel1.y].getColor() == c) {
+				Pixel pixeltemp = new Pixel(pixel1.x -1, pixel1.y, pixel1.isColor1);
 				stack.push(pixeltemp);
-			}if(pixel1.y + 1) != 401 && mesh[pixel1.x][pixel1.y + 1].getColor == c){
-				Pixel pixeltemp = new Pixel(pixel1.x, pixel1.y+1);
+			}if((pixel1.y + 1) < mesh[x].length && mesh[pixel1.x][pixel1.y + 1].getColor() == c){
+				Pixel pixeltemp = new Pixel(pixel1.x, pixel1.y+1, !pixel1.isColor1);
 				stack.push(pixeltemp);
-			}if((pixel1.x + 1) != 401 && mesh[pixel1.x + 1][pixel1.y].getColor == c) {
-				Pixel pixeltemp = new Pixel(pixel1.x +1, pixel1.y);
+			}if((pixel1.x + 1) < mesh.length && mesh[pixel1.x + 1][pixel1.y].getColor() == c) {
+				Pixel pixeltemp = new Pixel(pixel1.x +1, pixel1.y, pixel1.isColor1);
 				stack.push(pixeltemp);
-			}if(pixel1.y - 1) != -1 && mesh[pixel1.x][pixel1.y - 1].getColor == c){
-				Pixel pixeltemp = new Pixel(pixel1.x, pixel1.y-1);
+			}if((pixel1.y - 1) != -1 && mesh[pixel1.x][pixel1.y - 1].getColor() == c){
+				Pixel pixeltemp = new Pixel(pixel1.x, pixel1.y-1, !pixel1.isColor1);
 				stack.push(pixeltemp);
 			}
-			mesh[pixel1.x][pixel1.y]= color1;
+			
+			if(pixel1.isColor1) {
+				mesh[pixel1.x][pixel1.y]= color1;
+			}else {
+				mesh[pixel1.x][pixel1.y]= color2;
+			}
 		}
 	}
 	
