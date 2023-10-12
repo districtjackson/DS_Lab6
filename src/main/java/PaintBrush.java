@@ -87,13 +87,13 @@ set the "paint" for the paintbrush
 		
 		mesh[x][y] = getPaint();
 		
-		if((x - 1) != -1 && mesh[x - 1][y].getColor() == c) {
+		if((x - 1) != -1 && mesh[x - 1][y].getColor().equals(c)) {
 			fill(x - 1, y, mesh);
-		}if((y + 1) < mesh[x].length && mesh[x][y + 1].getColor() == c){
+		}if((y + 1) < mesh[x].length && mesh[x][y + 1].getColor().equals(c)){
 			fill(x, y + 1, mesh);
-		}if((x + 1) < mesh.length && mesh[x + 1][y].getColor() == c) {
+		}if((x + 1) < mesh.length && mesh[x + 1][y].getColor().equals(c)) {
 			fill(x + 1, y, mesh);
-		}if((y - 1) != -1 && mesh[x][y - 1].getColor() == c){
+		}if((y - 1) != -1 && mesh[x][y - 1].getColor().equals(c)){
 			fill(x, y - 1, mesh);
 		}
 	}
@@ -103,14 +103,14 @@ set the "paint" for the paintbrush
 		
 		mesh[x][y] = color1;
 		
-		if((x - 1) != -1 && mesh[x - 1][y].getColor() == c) {
-			pattern1(x - 1, y, mesh, color1, color2);
-		}if((y + 1) < mesh[x].length && mesh[x][y + 1].getColor() == c){
-			pattern1(x, y + 1, mesh, color2, color1);
-		}if((x + 1) < mesh.length && mesh[x + 1][y].getColor() == c) {
-			pattern1(x + 1, y, mesh, color1, color2);
-		}if((y - 1) != -1 && mesh[x][y - 1].getColor() == c){
-			pattern1(x, y - 1, mesh, color2, color1);
+		if((x - 1) != -1 && mesh[x - 1][y].getColor().equals(c)) {
+			pattern1(x - 1, y, mesh, color2, color1);
+		}if((y + 1) < mesh[x].length && mesh[x][y + 1].getColor().equals(c)){
+			pattern1(x, y + 1, mesh, color1, color2);
+		}if((x + 1) < mesh.length && mesh[x + 1][y].getColor().equals(c)) {
+			pattern1(x + 1, y, mesh, color2, color1);
+		}if((y - 1) != -1 && mesh[x][y - 1].getColor().equals(c)){
+			pattern1(x, y - 1, mesh, color1, color2);
 		}
 	}
 
@@ -134,18 +134,14 @@ set the "paint" for the paintbrush
 		
 		while (!stack.isEmpty()){
 			pixel1 = stack.pop();
-			if((pixel1.x - 1) != -1 && mesh[pixel1.x - 1][pixel1.y].getColor() == c) {
-				Pixel pixeltemp = new Pixel(pixel1.x -1, pixel1.y, pixel1.isColor1);
-				stack.push(pixeltemp);
-			}if((pixel1.y + 1) < mesh[x].length && mesh[pixel1.x][pixel1.y + 1].getColor() == c){
-				Pixel pixeltemp = new Pixel(pixel1.x, pixel1.y+1, !pixel1.isColor1);
-				stack.push(pixeltemp);
-			}if((pixel1.x + 1) < mesh.length && mesh[pixel1.x + 1][pixel1.y].getColor() == c) {
-				Pixel pixeltemp = new Pixel(pixel1.x +1, pixel1.y, pixel1.isColor1);
-				stack.push(pixeltemp);
-			}if((pixel1.y - 1) != -1 && mesh[pixel1.x][pixel1.y - 1].getColor() == c){
-				Pixel pixeltemp = new Pixel(pixel1.x, pixel1.y-1, !pixel1.isColor1);
-				stack.push(pixeltemp);
+			if((pixel1.x - 1) != -1 && mesh[pixel1.x - 1][pixel1.y].getColor().equals(c)) {
+				stack.push(new Pixel(pixel1.x -1, pixel1.y, !pixel1.isColor1));
+			}if((pixel1.y + 1) < mesh[x].length && mesh[pixel1.x][pixel1.y + 1].getColor().equals(c)){
+				stack.push(new Pixel(pixel1.x, pixel1.y+1, pixel1.isColor1));
+			}if((pixel1.x + 1) < mesh.length && mesh[pixel1.x + 1][pixel1.y].getColor().equals(c)) {
+				stack.push(new Pixel(pixel1.x +1, pixel1.y, !pixel1.isColor1));
+			}if((pixel1.y - 1) != -1 && mesh[pixel1.x][pixel1.y - 1].getColor().equals(c)){
+				stack.push(new Pixel(pixel1.x, pixel1.y-1, pixel1.isColor1));
 			}
 			
 			if(pixel1.isColor1) {
@@ -154,6 +150,8 @@ set the "paint" for the paintbrush
 				mesh[pixel1.x][pixel1.y]= color2;
 			}
 		}
+		
+		System.out.println("Pattern fill finished");
 	}
 	
 /*
